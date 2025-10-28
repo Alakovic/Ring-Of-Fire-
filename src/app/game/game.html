@@ -1,0 +1,22 @@
+<section>
+  <div class="card-stack">
+    @for (c of cards; track c ;let i = $index) {
+    <img [ngStyle]="{ 'right.px': i * 5 }" src="assets/images/cards/card_cover.png" alt="cardImg" />
+    }
+    <img
+      (click)="takeCard()"
+      class="top-card"
+      style="right: 25px"
+      src="assets/images/cards/card_cover.png"
+      alt="cardImg"
+    />
+    @if(pickCardAnimation){
+    <img
+      (click)="takeCard()"
+      class="pick-card"
+      style="right: 25px"
+      src="assets/images/cards/ace_1.png"
+      alt="cardImg"
+    />}
+  </div>
+</section>
