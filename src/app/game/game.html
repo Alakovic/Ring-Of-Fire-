@@ -1,3 +1,7 @@
+@for (player of game?.players; track player;let i = $index) {
+<app-player [ngStyle]="{ 'top.px': 100 + i * 120 }" [name] ="player" class="player-position"></app-player>
+}
+
 <section>
   <div class="card-stack">
     @for (c of cards; track c ;let i = $index) {
@@ -10,7 +14,11 @@
       src="assets/images/cards/card_cover.png"
       alt="cardImg"
     />
-    @if(pickCardAnimation){
+    @for (card of game?.playedCards; track card) {<img
+      class="played-card"
+      src="assets/images/cards/{{ card }}.png"
+      alt="playedCardImg"
+    />} @if(pickCardAnimation){
     <img
       (click)="takeCard()"
       class="pick-card"

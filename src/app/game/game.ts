@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { GameModel } from './../../models/game';
+import { Player } from '../player/player';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,Player],
   templateUrl: './game.html',
   styleUrls: ['./game.scss'],
 })
@@ -29,9 +30,11 @@ export class Game {
     if (!this.pickCardAnimation) {
       this.currentCard = this.game?.stack.pop() || '';
       this.pickCardAnimation = true;
+    
       setTimeout(() => {
+        this.game?.playedCards.push(this.currentCard);
         this.pickCardAnimation = false;
-      }, 1500);
+      }, 1000);
     }
   }
 }

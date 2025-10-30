@@ -1,7 +1,7 @@
 export class GameModel {
-    public players: string[] = [];
+    public players: string[] = ['Hans', 'Peter', 'Freddy'];
     public stack :string[] = [];
-    public playerCard :string[] = [];
+    public playedCards :string[] = [];
     public currentPlayer:number = 0;
 
     constructor(){
