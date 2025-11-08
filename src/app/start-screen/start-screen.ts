@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { GameService } from '../firebase-service/game-service';
 
 @Component({
   selector: 'app-start-screen',
@@ -9,9 +10,10 @@ import { Router } from '@angular/router';
   styleUrl: './start-screen.scss',
 })
 export class StartScreen {
-  router = inject(Router)
+  router = inject(Router);
+  gameService = inject(GameService);
   
-  newGame(){
+  newGame() {
     this.router.navigate(['/game']);
   }
 }
