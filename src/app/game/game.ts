@@ -19,25 +19,23 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class Game {
   cards: number[] = [0, 1, 2, 3];
-  pickCardAnimation: boolean = false;
-  currentCard: string = '';
   game?: GameModel;
+  gameId: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private gameService: GameService,
-    public dialog: MatDialog,
-    private zone: NgZone
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      const gameId = params['id'];
-      console.log('Game ID:', gameId);
+      this.gameId = params['id'];
+      console.log('Game ID:', this.gameId);
 
-      this.gameService.getGameById(gameId).subscribe((gameData: any) => {
+      this.gameService.getGameById(this.gameId).subscribe((gameData: any) => {
         this.updateGameFromData(gameData);
-         console.log('Game update', gameData);
+        console.log('Game update', gameData);
       });
     });
   }
@@ -47,32 +45,32 @@ export class Game {
       this.game = new GameModel();
     }
 
-    this.game.currentPlayer = gameData.currentPlayer;
+    this.game.currentPlayer = gameData.currentPlayer ?? 0;
     this.game.playedCards = gameData.playedCards;
     this.game.players = gameData.players;
     // this.game.player_images = gameData.player_images;
     this.game.stack = gameData.stack;
-    // this.game.pickCardAnimation = gameData.pickCardAnimation;
-    // this.game.currentCard = gameData.currentCard;
+    this.game.pickCardAnimation = gameData.pickCardAnimation;
+    this.game.currentCard = gameData.currentCard;
   }
 
   newGame() {
     this.game = new GameModel();
-    this.gameService.addGame(this.game);
   }
 
   takeCard() {
-    if (!this.pickCardAnimation) {
-      this.currentCard = this.game?.stack.pop() || '';
-      this.pickCardAnimation = true;
-
-      if (this.game) {
+    if (this.game && !this.game.pickCardAnimation) {
+      this.game.currentCard = this.game.stack.pop() || '';
+      this.game.pickCardAnimation = true;
+      if (this.game.players.length > 0) {
         this.game.currentPlayer++;
         this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
       }
+      this.saveGame();
       setTimeout(() => {
-        this.game?.playedCards.push(this.currentCard);
-        this.pickCardAnimation = false;
+        this.game!.playedCards.push(this.game!.currentCard);
+        this.game!.pickCardAnimation = false;
+        this.saveGame();
       }, 1000);
     }
   }
@@ -81,9 +79,19 @@ export class Game {
     const dialogRef = this.dialog.open(DialogAddPlayer);
 
     dialogRef.afterClosed().subscribe((name: string) => {
-      if (name && name.length > 0) {
-        this.game?.players.push(name);
+      if (name && name.length > 0 && this.game) {
+        this.game.players.push(name);
+        this.saveGame();
       }
     });
+  }
+
+  saveGame() {
+    if (this.game && this.gameId) {
+      this.gameService
+        .saveGame(this.gameId, this.game)
+        .then(() => console.log('Game saved successfully!'))
+        .catch((err) => console.error('Error saving game:', err));
+    }
   }
 }
