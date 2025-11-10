@@ -6,4 +6,26 @@ mat-card-title {
 
 mat-card-content {
   font-size: 20px;
+
+  @media (max-width: 438px) {
+    max-height: 150px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: orange;
+      border-radius: 3px;
+    }
+  }
+
+  @media (max-width: 382px) {
+    max-height: 125px;
+  }
 }

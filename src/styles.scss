@@ -11,6 +11,7 @@ html {
     color: (
       primary: mat.$azure-palette,
       tertiary: mat.$blue-palette,
+      warn: mat.$red-palette
     ),
   ));
 }
@@ -31,5 +32,25 @@ body {
 }
 *{
     margin: 0;
+}
+
+
+@media (max-width: 720px) {
+    .hide-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 720px) {
+    .hide-desktop {
+        display: none !important;
+    }
+}
+
+:root {
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-error),
+    filled-label-text-color: white,
+  ));
 }
 
